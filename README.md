@@ -224,7 +224,7 @@
 
 ### Keyboard shortcuts
 
-- [Visual Studio](appendices/visual-studio-keyboard-shortcuts.pdf)
+- [Visual Studio](appendices/visual-studio-keyboard-shortcuts.pdf) (Can be configured to use vscode keyboard mapping scheme)
 - [vscode](appendices/vscode-keyboard-shortcuts.pdf)
 - [SSMS](appendices/ssms-keyboard-shortcuts.pdf)
 
