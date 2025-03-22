@@ -238,3 +238,44 @@
   | Cosmos DB database    | Azure Cosmos DB emulator.                                                                          |
   | Azure functions       | Azurite open-source emulator.                                                                      |
   | Azure SignalR Service | Add SignalR to any ASP.NET Core project.                                                           |
+
+## Benchmarking Performance and Testing
+
+### Monitoring performance and resource usage (memory)
+
+- Before improving the performance of any code, we should monitor its speed to record a **baseline**.
+
+#### Evaluating the efficiency of types
+
+- Factors to determine the best types to use:
+  - Functionality
+  - Memory size
+  - Performance
+  - Future needs
+- `sizeof()` shows the number of bytes that a single instance (primitive types) uses.
+
+#### Monitor performance and memory using diagnostics
+
+- `System.Diagnostics` namespace
+
+#### Useful members of the `Stopwatch` and `Process` types
+
+- `Stopwatch` type:
+
+  | Member                         | Description                                                  |
+  | ------------------------------ | ------------------------------------------------------------ |
+  | `Restart` method               | Resets the elapsed time and starts the timer.                |
+  | `Stop` method                  | Stops the timer.                                             |
+  | `Elapsed` property             | Elapsed time stored as a `TimeSpan`.                         |
+  | `ElapsedMilliseconds` property | Elapsed time **in milliseconds** stored as an `Int64` value. |
+
+- `Process` type:
+
+  | Member                | Description                                                      |
+  | --------------------- | ---------------------------------------------------------------- |
+  | `VirtualMemorySize64` | Displays the amount of **virtual memory**, in bytes, allocated.  |
+  | `WorkingSet64`        | Displays the amount of **physical memory**, in bytes, allocated. |
+
+#### Implementing a `Recorder` class
+
+- To monitor time and memory resource usage.
