@@ -241,7 +241,7 @@
 
 ## Benchmarking Performance and Testing
 
-### Monitoring performance and resource usage (memory)
+### Monitoring performance and memory resource usage using built-in types
 
 - Before improving the performance of any code, we should monitor its speed to record a **baseline**.
 
@@ -276,6 +276,11 @@
   | `VirtualMemorySize64` | Displays the amount of **virtual memory**, in bytes, allocated.  |
   | `WorkingSet64`        | Displays the amount of **physical memory**, in bytes, allocated. |
 
-#### Implementing a `Recorder` class
+#### Implementing a `Recorder` class (Utils)
 
 - To monitor time and memory resource usage.
+
+#### Measuring the efficiency of processing strings
+
+- To evaluate the best way to process `string` variables.
+- **Good Practice:** Avoid using the `String.Concat` method or the `+` operator inside loops. Use `StringBuilder` instead.
