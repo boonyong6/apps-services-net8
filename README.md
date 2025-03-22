@@ -284,3 +284,10 @@
 
 - To evaluate the best way to process `string` variables.
 - **Good Practice:** Avoid using the `String.Concat` method or the `+` operator inside loops. Use `StringBuilder` instead.
+
+### Monitoring performance and memory using `Benchmark.NET`
+
+#### Building a console app with `Benchmark.NET`
+
+- Define a class with **methods** for each benchmark.
+- `Important:` Must build in a **Release** build for performance testing, as most optimizations are disabled in **Debug** builds.
