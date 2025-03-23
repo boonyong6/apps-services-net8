@@ -349,3 +349,18 @@
        }
      }
      ```
+
+#### Fixing the code
+
+- **Project property** for generating an **XML file for documentation**.
+
+  - The XML file can then be processed by a tool like **DocFX** to convert it into documentation files.
+  - **Reference:** https://www.jamescroft.co.uk/building-net-project-docs-with-docfx-on-github-pages/
+
+  ```xml
+  <!-- .csproj -->
+  <PropertyGroup>
+    ...
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  ```
