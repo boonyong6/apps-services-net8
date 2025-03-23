@@ -291,3 +291,28 @@
 
 - Define a class with **methods** for each benchmark.
 - `Important:` Must build in a **Release** build for performance testing, as most optimizations are disabled in **Debug** builds.
+
+## Observing and Modifying Code Execution Dynamically
+
+- About **types** for:
+  - Performing **code reflection** and **applying and reading attributes**
+  - Working with **expression trees**
+  - Creating **source generators**
+
+### Using an analyzer to write better code - StyleCop
+
+- Steps to setup StyleCop:
+
+  1. Add the `StyleCop.Analyzers` package reference.
+  2. Add a `stylecop.json` for configuring StyleCop settings.
+
+     ```json
+     {
+       "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+       "settings": {}
+     }
+     ```
+
+  3. In the `.csproj`, configure the `stylecop.json`:
+     - To **not be included** in published **deployments**.
+     - To **enable it** as an additional file **for processing during development**.
