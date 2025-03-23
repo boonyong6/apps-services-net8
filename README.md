@@ -316,3 +316,36 @@
   3. In the `.csproj`, configure the `stylecop.json`:
      - To **not be included** in published **deployments**.
      - To **enable it** as an additional file **for processing during development**.
+
+#### Suppressing warnings
+
+- Three ways:
+
+  1. Setting an **assembly-level attribute**
+
+     ```cs
+     // GlobalSuppressions.cs
+
+     [assembly: SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1200:UsingDirectivesMustBePlacedWithinNamespace", Justification = "Reviewed.")]
+     ```
+
+  2. Using `#pragma` statements
+
+     ```cs
+     #pragma warning disable SA1200
+     using System.Diagnostics;
+     #pragma warning restore SA1200
+     ```
+
+  3. Add a configuration option in `stylecop.json`
+
+     ```json
+     {
+       "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+       "settings": {
+         "orderingRules": {
+           "usingDirectivesPlacement": "outsideNamespace"
+         }
+       }
+     }
+     ```

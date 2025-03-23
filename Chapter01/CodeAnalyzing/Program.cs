@@ -1,5 +1,13 @@
-﻿// <copyright file="Program.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
-// </copyright>
+﻿#pragma warning disable SA1200
+using System.Diagnostics;
+#pragma warning restore SA1200
 
-Console.WriteLine("Hello, World!");
+namespace CodeAnalyzing;
+
+public class Program
+{
+    static void Main(string[] args)
+    {
+        Debug.WriteLine("Hello, Debugger!");
+    }
+}
