@@ -419,3 +419,9 @@
     {
   ...
   ```
+
+#### Creating custom attributes
+
+- By **inheriting** from the `Attribute` class.
+- To **decorate** others classes and methods.
+- Provides metadata for **reflection-based logic**.
