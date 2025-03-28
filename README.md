@@ -355,7 +355,7 @@
 - **Project property** for generating an **XML file for documentation**.
 
   - The XML file can then be processed by a tool like **DocFX** to convert it into documentation files.
-  - **Reference:** https://www.jamescroft.co.uk/building-net-project-docs-with-docfx-on-github-pages/
+  - Reference: [DocFX guide](https://www.jamescroft.co.uk/building-net-project-docs-with-docfx-on-github-pages/)
 
   ```xml
   <!-- .csproj -->
@@ -363,4 +363,59 @@
     ...
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+  ```
+
+#### Understanding common StyleCop recommendations
+
+- Order inside a code file:
+
+  1. External alias directives
+  2. Using directives
+  3. Namespaces
+  4. Delegates
+  5. Enums
+  6. Interfaces
+  7. Structs
+  8. Classes
+
+- Order within a class:
+
+  1. Fields
+  2. Constructors
+  3. Destructors (finalizers)
+  4. Delegates
+  5. Events
+  6. Enums
+  7. Interfaces
+  8. Properties
+  9. Indexers
+  10. Methods
+  11. Structs
+  12. Nested classes and records
+
+- Reference: [StyleCop rules](https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/DOCUMENTATION.md)
+
+### Working with reflection and attributes
+
+- **Reflection** is a feature that allows code to **manipulate itself**.
+- **Assembly** is made up of four parts:
+  1. Assembly metadata - Name, file version, referenced assemblies
+  2. Type metadata
+  3. IL code
+  4. Embedded resources (optional) - Images, Javascript
+- **Attributes** can be applied at multiple levels:
+
+  ```cs
+  // an assembly-level attribute
+  [assembly: AssemblyTitle("Working with reflection and attributes")]
+
+  // a type-level attribute
+  [Serializable]
+  public class Person
+  {
+    // a member-level attribute
+    [Obsolete("Deprecated: use Run instead.")]
+    public void Walk()
+    {
+  ...
   ```
