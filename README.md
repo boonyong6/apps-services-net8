@@ -470,3 +470,10 @@
 #### Executing the simplest expression tree
 
 - [Code References](Chapter01/WorkingWithExpressionTrees/Program.cs)
+
+### Create source generators
+
+- Dynamically generate and compile code files.
+- [`System.Text.Json` source generator](https://devblogs.microsoft.com/dotnet/try-the-new-system-text-json-source-generator/)
+  - **By default**, serializing JSON uses **reflection** at runtime to dynamically analyze an object model, but this is **slow**.
+- Source generators must target **.NET Standard 2.0**.
