@@ -444,3 +444,29 @@
 
 - [Inspect assembly contents using `MetadataLoadContext`](https://docs.microsoft.com/en-us/dotnet/standard/assembly/inspect-contents-using-metadataloadcontext)
 - [Dynamically generate new code and assemblies](https://docs.microsoft.com/en-us/dotnet/api/system.reflection.emit.assemblybuilder)
+
+### Working with expression trees
+
+- **Represent code as a structure** that you can examine or execute.
+- Expression trees are **immutable**.
+- Also used to represent an expression in an **abstract** way, allowing that data structure to be expressed in other ways, using other languages (e.g. LINQ to entities).
+
+#### Understanding components of expression trees - `System.Linq.Expressions`
+
+- Types for representing the components of an expression tree:
+
+  | Type                    | Description                                                                      |
+  | ----------------------- | -------------------------------------------------------------------------------- |
+  | `BinaryExpression`      | Expression with **binary operator**.                                             |
+  | `BlockExpression`       | A block containing **a sequence of expressions** where variables can be defined. |
+  | `CatchBlock`            | A **catch statement** in a try block.                                            |
+  | `ConditionalExpression` | Expression that has a **conditional operator**.                                  |
+  | \*`LambdaExpression`    | A lambda expression. **(Only this can be executed)**                             |
+  | `MemberAssignment`      | **Assigning** to a field or property.                                            |
+  | `MemberExpression`      | **Accessing** a field or property.                                               |
+  | `MethodCallExpression`  | A call to a **method**.                                                          |
+  | `NewExpression`         | A call to a **constructor**.                                                     |
+
+#### Executing the simplest expression tree
+
+- [Code References](Chapter01/WorkingWithExpressionTrees/Program.cs)
