@@ -424,4 +424,8 @@
 
 - By **inheriting** from the `Attribute` class.
 - To **decorate** others classes and methods.
-- Provides metadata for **reflection-based logic**.
+- Provides **metadata** for **reflection-based logic**.
+
+### Making a type or member obsolete - `[Obsolete]`
+
+- When you want to refactor your types and members while maintaining **backward compatibility**.
