@@ -425,6 +425,7 @@
 - By **inheriting** from the `Attribute` class.
 - To **decorate** others classes and methods.
 - Provides **metadata** for **reflection-based logic**.
+- [Code References](Chapter01/WorkingWithReflection/CoderAttribute.cs)
 
 ### Making a type or member obsolete - `[Obsolete]`
 
