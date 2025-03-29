@@ -429,3 +429,17 @@
 ### Making a type or member obsolete - `[Obsolete]`
 
 - When you want to refactor your types and members while maintaining **backward compatibility**.
+
+### Dynamically loading assemblies and executing methods
+
+- When not knowing the assemblies that you need to call until runtime.
+- **Use cases:**
+  - An assembly that is only loaded into memory when it is **activated** by the user.
+  - **Custom plugins** implementation.
+- Can dynamically load assemblies into an `AssemblyLoadContext`.
+- **Is collectible** means the assemblies can be **removed from memory**.
+
+#### Doing more with reflection
+
+- [Inspect assembly contents using `MetadataLoadContext`](https://docs.microsoft.com/en-us/dotnet/standard/assembly/inspect-contents-using-metadataloadcontext)
+- [Dynamically generate new code and assemblies](https://docs.microsoft.com/en-us/dotnet/api/system.reflection.emit.assemblybuilder)
