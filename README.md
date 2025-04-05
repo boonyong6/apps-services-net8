@@ -95,7 +95,7 @@
 
 ### Companion books to continue your learning journey
 
-![1-1-companion-books-for-learning-c#-12-and-net-8](images/1-1-companion-books-for-learning-c.md)
+![1-1-companion-books-for-learning-csharp-12-and-net-8](images/1-1-companion-books-for-learning-csharp-12-and-net-8.png)
 
 ### What you will learn in this book
 
@@ -477,3 +477,55 @@
 - [`System.Text.Json` source generator](https://devblogs.microsoft.com/dotnet/try-the-new-system-text-json-source-generator/)
   - **By default**, serializing JSON uses **reflection** at runtime to dynamically analyze an object model, but this is **slow**.
 - Source generators must target **.NET Standard 2.0**.
+
+# 2 Managing Relational Data Using SQL Server
+
+## Understanding modern databases
+
+- Use **Azure SQL Database** or **Azure SQL Edge** (can run in a Docker container) for **cross-platform development**.
+
+### Using a simple relational database
+
+- Northwind database **tables** and **relationships**:
+
+  ![2-1-the-northwind-database-tables-and-relationships](images/2-1-the-northwind-database-tables-and-relationships.png)
+
+### Connecting to a SQL Server database - Connection string
+
+- Information needed to connect to a SQL Server database:
+  - **Server name** - Can include the protocol, IP address, and port number.
+  - **Database name**
+  - **Security info** - username and password, or Windows Authentication
+- **Connection string's keywords for parameters**:
+
+  - Multiple possible keywords is for **backward compatibility**.
+
+  | Keywords                      | Description                                                                                                                                                                                    |
+  | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `Data Source`/`server`/`addr` | - Server name.<br />- Can use `.` to mean the **local server**.                                                                                                                                |
+  | `Initial Catalog`/`database`  | - Initial database name.<br />- A SQL statement could change that using the `USE <database_name>`.                                                                                             |
+  | `User Id` and `Password`      | - For authentication.<br />- Important for Azure SQL Database or Azure SQL Edge because they **do not support Windows Authentication**.                                                        |
+  | `Authentication`              | - To authenticate by using **Azure AD** that can enable **password-less authentication**.<br />- Values can be `Active Directory Integrated`, `Active Directory Password`, and `Sql Password`. |
+  | `Persist Security Info`       | - `false` - To Remove the `Password` from the connection string **after authenticating**.                                                                                                      |
+  | `Encrypt`                     | - `true` - To use SSL to encrypt transmissions.                                                                                                                                                |
+  | `TrustServerCertificate`      | - Set to `true` if **hosting locally** and get the cert error.                                                                                                                                 |
+  | `Connection Timeout`          | Defaults to **30 seconds**.                                                                                                                                                                    |
+  | `MultipleActiveResultSets`    | - `true` - To enable a **single connection** to work with **multiple tables simultaneously** to improve efficiency. It is used for **lazy loading** rows from related tables.                  |
+
+- **Server name** depends on the edition and version of SQL Server:
+
+  | SQL Server edition                | Server name \ Instance name                          |
+  | --------------------------------- | ---------------------------------------------------- |
+  | LocalDB 2012                      | `(localdb)\v11.0`                                    |
+  | LocalDB 2016 or later             | `(localdb)\mssqllocaldb`                             |
+  | Express                           | `.\sqlexpress`                                       |
+  | Full/Developer (default instance) | `.`                                                  |
+  | Full/Developer (named instance)   | `.\apps-services-book`                               |
+  | Azure SQL Edge (local Docker)     | `tcp:127.0.0.1,1433`                                 |
+  | Azure SQL Database                | `tcp:[custom server name].database.windows.net,1433` |
+
+- **Good Practice:**
+  - Use `.` for the **localhost**.
+  - **Server name** can be made up of two parts:
+    1. Computer name
+    2. SQL Server instance name (Can be provided during **custom installation**)
