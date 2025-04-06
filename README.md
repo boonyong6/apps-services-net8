@@ -529,3 +529,72 @@
   - **Server name** can be made up of two parts:
     1. Computer name
     2. SQL Server instance name (Can be provided during **custom installation**)
+
+## Managing data with Transact-SQL (T-SQL)
+
+- **Text data** can be treated as **case-sensitive or not, depending on the configuration**.
+- Reference: [T-SQL](https://learn.microsoft.com/en-us/sql/t-sql/language-reference)
+
+### T-SQL data types
+
+- Used for **columns**, **variables**, and **parameters**:
+
+  | Category      | Examples                                                                                                    |
+  | ------------- | ----------------------------------------------------------------------------------------------------------- |
+  | Numbers       | `bigint`, `bit`, `decimal`, `float`, `int`, `money`, `numeric`, `real`, `smallint`, `smallmoney`, `tinyint` |
+  | Date and time | `date`, `datetime2`, `datetime`, `datetimeoffset`, `smalldatetime`, `time`                                  |
+  | Text          | `char`, `nchar`, `ntext`, `nvarchar`, `text`, `varchar`                                                     |
+  | Binary        | `binary`, `image`, `varbinary`                                                                              |
+  | Other         | `cursor`, `hierarchyid`, `sql_variant`, `table`, `rowversion`, `uniqueidentifier`, `xml`                    |
+
+- **Note:** No JSON data type. Use `nvarchar` to store JSON values.
+
+### Declaring variables
+
+- **Local variables** are prefixed with `@`, and defined using `SET`, `SELECT`, or `DECLARE`:
+
+  ```sql
+  DECLARE @WholeNumber INT; -- Must declare a variable first.
+  SET @WholeNumber = 3;
+  SET @WholeNumber = @WholeNumber + 1;
+  SELECT @WholeNumber = COUNT(*) FROM Employees;
+  SELECT @WholeNumber = EmployeeId FROM Employees WHERE FirstName = 'Janet';
+  ```
+
+- **Global variables** are prefixed with `@@`, such as `@@ROWCOUNT`.
+
+### Specifying data types
+
+- Most types has a **fixed size**.
+- For **text** and **binary** types, you can **prefixed with** `var` or `nvar` (variable size), which will **change its size** based on its current value.
+- For **text** types, `n` prefix (Unicode) will use **two bytes** per character.
+
+### Controlling flow
+
+- **Similar** flow control keywords as C# - `BREAK`, `CONTINUE`, `GOTO`, `IF...ELSE`, `CASE`, `THROW`, `TRY...CATCH`, `WHILE`, and `RETURN`.
+- Main **difference** - `BEGIN` and `END`, the equivalent of **curly braces** in C#.
+
+### Operators
+
+- LINQ-like operators - `ANY`, `ALL`, `SOME`, `EXISTS`, `BETWEEN`, and `IN`.
+- Text pattern matching - `LIKE`
+  - `%` - Match **any number** of characters.
+  - `_` - Match a **single** character.
+  - `[]` - Match a **range** and **set** of allowed characters.
+    - E.g. `[0-9A-Z.-,]`
+    - Looks like a regex but **it is not**.
+
+### Data Manipulation Language (DML)
+
+- To query and change data.
+- Reference: [`SELECT`](https://learn.microsoft.com/en-us/sql/t-sql/queries/select-transact-sql)
+
+### Data Definition Language (DDL)
+
+- Change the **structure** of the database, including creating new objects like **tables**, **functions**, and **stored procedures**.
+
+  | Example                                                                                                   | Description                                                                                               |
+  | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+  | `CREATE INDEX IX_FullName`<br />`ON Employees(LastName, FirstName DESC)`<br />`WITH (DROP_EXISTING = ON)` | - Change an **aggregate index** (multiple key columns).<br />- **Key column** is for seeking and sorting. |
+  | `DROP TABLE IF EXISTS Employees`                                                                          | - Avoid the error when the `Employees` table doesn't exist.                                               |
+  | `IF OBJECT_ID(N'Employees', N'U') IS NOT NULL`                                                            | - Check if a table exists.<br />- `U` means a **user table**.                                             |
