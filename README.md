@@ -598,3 +598,23 @@
   | `CREATE INDEX IX_FullName`<br />`ON Employees(LastName, FirstName DESC)`<br />`WITH (DROP_EXISTING = ON)` | - Change an **aggregate index** (multiple key columns).<br />- **Key column** is for seeking and sorting. |
   | `DROP TABLE IF EXISTS Employees`                                                                          | - Avoid the error when the `Employees` table doesn't exist.                                               |
   | `IF OBJECT_ID(N'Employees', N'U') IS NOT NULL`                                                            | - Check if a table exists.<br />- `U` means a **user table**.                                             |
+
+## Managing data with low-level APIs - `ADO.NET`
+
+- `Microsoft.Data.SqlClient` package
+
+### Understanding the types in ADO.NET
+
+- **Abstract types** - `DbConnection`, `DbCommand`, and `DbDataReader`.
+  - Database providers can **inherit** from and provide specific implementations.
+- Most important **types** with their most used **members** for SQL Server:
+
+  | Type                         | Properties                                                                             | Methods                                                                                  |
+  | ---------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+  | `SqlConnection`              | `ConnectionString`, `State`, `ServerVersion`                                           | `Open`, `Close`, `CreateCommand`, `RetrieveStatistics`                                   |
+  | `SqlConnectionStringBuilder` | `InitialCatalog`, `DataSource`, `Encrypt`, `UserID`, `Password`, `ConnectionTimeout`   | `Clear`, `ContainsKey`, `Remove`                                                         |
+  | `SqlCommand`                 | `Connection`, `CommandType`, `CommandText`, `Parameters`, `Transaction`                | `ExecuteReader`, `ExecuteNonQuery`, `ExecuteXmlReader`, `CreateParameter`                |
+  | `SqlParameter`               | `ParameterName`, `Value`, `DbType`, `SqlValue`, `SqlDbType`, `Direction`, `IsNullable` |                                                                                          |
+  | `SqlDataReader`              | `FieldCount`, `HasRows`, `IsClosed`, `RecordsAffected`                                 | `Read`, `Close`, `GetOrdinal`, `GetInt32`, `GetString`, `GetDecimal`, `GetFieldValue<T>` |
+
+- `SqlConnection` has two **useful events** - `StateChange` and `InfoMessage`.
