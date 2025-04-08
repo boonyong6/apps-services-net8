@@ -104,19 +104,35 @@ catch (SqlException ex)
     return;
 }
 
+WriteLine();
+
 #endregion
 
 #region Executing queries and working with data readers using ADO.NET
 
+Write("Enter a unit price: ");
+string? priceText = ReadLine();
+if (!decimal.TryParse(priceText, out decimal price))
+{
+    WriteLine("You must enter a valid unit price.");
+    return;
+}
+
+SqlCommand command = connection.CreateCommand();
+command.CommandType = CommandType.Text;
+command.CommandText = """
+    SELECT ProductId, ProductName, UnitPrice 
+    FROM Products
+    WHERE UnitPrice >= @minimumPrice
+    """;
+command.Parameters.AddWithValue("minimumPrice", price);
+
+// Table header
 string horizontalLine = new string('-', 60);
 WriteLine(horizontalLine);
 WriteLine("| {0,5} | {1,-35} | {2,10} |", 
     arg0: "Id", arg1: "Name", arg2: "Price");
 WriteLine(horizontalLine);
-
-SqlCommand command = connection.CreateCommand();
-command.CommandType = CommandType.Text;
-command.CommandText = "SELECT ProductId, ProductName, UnitPrice FROM Products";
 
 SqlDataReader reader = command.ExecuteReader();
 while (reader.Read())
