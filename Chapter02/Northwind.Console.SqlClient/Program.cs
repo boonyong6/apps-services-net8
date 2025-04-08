@@ -97,6 +97,7 @@ try
     WriteLine();
     connection.Open();
     WriteLine($"SQL Server version: {connection.ServerVersion}");
+    connection.StatisticsEnabled = true;
 }
 catch (SqlException ex)
 {
@@ -147,4 +148,5 @@ WriteLine(horizontalLine);
 
 #endregion
 
+OutputStatistics(connection);
 connection.Close();

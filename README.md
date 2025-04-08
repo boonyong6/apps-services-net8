@@ -618,3 +618,16 @@
   | `SqlDataReader`              | `FieldCount`, `HasRows`, `IsClosed`, `RecordsAffected`                                 | `Read`, `Close`, `GetOrdinal`, `GetInt32`, `GetString`, `GetDecimal`, `GetFieldValue<T>` |
 
 - `SqlConnection` has two **useful events** - `StateChange` and `InfoMessage`.
+
+### Outputting statistics
+
+- **ADO.NET connection** can track useful statistics during its lifetime.
+
+  | Key                                                            | Description                                                                         |
+  | -------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+  | `BuffersReceived`, `BuffersSent`, `BytesReceived`, `BytesSent` | Data is transmitted as bytes **stored in buffers**.                                 |
+  | `CursorOpens`                                                  | Cursors are **expensive** (require state on the server), and should be **avoided**. |
+  | `Prepares`, `PreparedExecs`, `UnpreparedExecs`                 | prepares = compilations                                                             |
+  | `SelectCount`, `SelectRows`                                    | Number of `SELECT` statements and rows.                                             |
+  | `ServerRoundtrips` `SumResultSets`, `Transactions`             |                                                                                     |
+  | `ConnectionTime`, `ExecutionTime`, `NetworkServerTime`         | Time in milliseconds spent.                                                         |
