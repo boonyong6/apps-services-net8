@@ -95,7 +95,7 @@ try
     WriteLine("Opening connection. Please wait up to {0} seconds...", 
         builder.ConnectTimeout);
     WriteLine();
-    connection.Open();
+    await connection.OpenAsync();
     WriteLine($"SQL Server version: {connection.ServerVersion}");
     connection.StatisticsEnabled = true;
 }
@@ -135,18 +135,19 @@ WriteLine("| {0,5} | {1,-35} | {2,10} |",
     arg0: "Id", arg1: "Name", arg2: "Price");
 WriteLine(horizontalLine);
 
-SqlDataReader reader = command.ExecuteReader();
-while (reader.Read())
+SqlDataReader reader = await command.ExecuteReaderAsync();
+while (await reader.ReadAsync())
 {
     WriteLine("| {0,5} | {1,-35} | {2,10:C} |",
-        reader.GetInt32("ProductId"),
-        reader.GetString("ProductName"),
-        reader.GetDecimal("UnitPrice"));
+        await reader.GetFieldValueAsync<int>("ProductId"),
+        await reader.GetFieldValueAsync<string>("ProductName"),
+        await reader.GetFieldValueAsync<decimal>("UnitPrice"));
 }
 
 WriteLine(horizontalLine);
+await reader.CloseAsync();
 
 #endregion
 
 OutputStatistics(connection);
-connection.Close();
+await connection.CloseAsync();
