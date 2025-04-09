@@ -631,3 +631,12 @@
   | `SelectCount`, `SelectRows`                                    | Number of `SELECT` statements and rows.                                             |
   | `ServerRoundtrips` `SumResultSets`, `Transactions`             |                                                                                     |
   | `ConnectionTime`, `ExecutionTime`, `NetworkServerTime`         | Time in milliseconds spent.                                                         |
+
+### Executing stored procedures using ADO.NET
+
+- **Stored procedure** is best for executing the same query multiple times because it can be **precompiled** and **optimized**.
+- **Direction** of stored procedure **parameters**:
+  - Input
+  - Output
+  - Return values
+- `PRINT` command raises the `InfoMessage` event.

@@ -119,14 +119,53 @@ if (!decimal.TryParse(priceText, out decimal price))
     return;
 }
 
+WriteLine("Execute command using:");
+WriteLine("  1 - Text");
+WriteLine("  2 - Stored Procedure");
+WriteLine();
+Write("Press a key: ");
+key = ReadKey().Key;
+WriteLine();
+WriteLine();
+
 SqlCommand command = connection.CreateCommand();
-command.CommandType = CommandType.Text;
-command.CommandText = """
-    SELECT ProductId, ProductName, UnitPrice 
-    FROM Products
-    WHERE UnitPrice >= @minimumPrice
-    """;
-command.Parameters.AddWithValue("minimumPrice", price);
+SqlParameter priceParam = new(), countParam = new(), returnValueParam = new();
+if (key is ConsoleKey.D1 or ConsoleKey.NumPad1)
+{
+    command.CommandType = CommandType.Text;
+    command.CommandText = """
+        SELECT ProductId, ProductName, UnitPrice 
+        FROM Products
+        WHERE UnitPrice >= @minimumPrice
+        """;
+    command.Parameters.AddWithValue("minimumPrice", price);
+}
+else if (key is ConsoleKey.D2 or ConsoleKey.NumPad2)
+{
+    command.CommandType = CommandType.StoredProcedure;
+    command.CommandText = "GetExpensiveProducts";
+    priceParam = new()
+    {
+        ParameterName = "price",
+        SqlDbType = SqlDbType.Money,
+        SqlValue = price,
+    };
+    countParam = new()
+    {
+        Direction = ParameterDirection.Output,
+        ParameterName = "count",
+        SqlDbType = SqlDbType.Int,
+    };
+    returnValueParam = new()
+    {
+        Direction = ParameterDirection.ReturnValue,
+        ParameterName = "rv",
+        SqlDbType = SqlDbType.Int,
+    };
+    command.Parameters.AddRange([priceParam, countParam, returnValueParam]);
+}
+
+SqlDataReader reader = await command.ExecuteReaderAsync();
 
 // Table header
 string horizontalLine = new string('-', 60);
@@ -135,7 +174,6 @@ WriteLine("| {0,5} | {1,-35} | {2,10} |",
     arg0: "Id", arg1: "Name", arg2: "Price");
 WriteLine(horizontalLine);
 
-SqlDataReader reader = await command.ExecuteReaderAsync();
 while (await reader.ReadAsync())
 {
     WriteLine("| {0,5} | {1,-35} | {2,10:C} |",
@@ -146,6 +184,11 @@ while (await reader.ReadAsync())
 
 WriteLine(horizontalLine);
 await reader.CloseAsync();
+if (key is ConsoleKey.D2 or ConsoleKey.NumPad2)
+{
+    WriteLine($"Output count: {countParam.Value}");
+    WriteLine($"Return value: {returnValueParam.Value}");
+}
 
 #endregion
 
