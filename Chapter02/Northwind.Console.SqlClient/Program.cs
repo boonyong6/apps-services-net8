@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient; // To use SqlConnection and so on.
+using Northwind.Models;
 using System.Data; // To use CommandType.
 using System.Text.Json; // To use Utf8JsonWriter, JsonSerializer.
 using static System.Environment;
@@ -179,6 +180,7 @@ WriteLine(horizontalLine);
 
 // Define a file path to write to.
 string jsonPath = Combine(CurrentDirectory, "products.json");
+List<Product> products = new(capacity: 77);
 await using (FileStream jsonStream = File.Create(jsonPath))
 {
     Utf8JsonWriter jsonWriter = new(jsonStream);
@@ -186,17 +188,21 @@ await using (FileStream jsonStream = File.Create(jsonPath))
 
     while (await reader.ReadAsync())
     {
-        int productId = await reader.GetFieldValueAsync<int>("ProductId");
-        string productName = await reader.GetFieldValueAsync<string>("ProductName");
-        decimal unitPrice = await reader.GetFieldValueAsync<decimal>("UnitPrice");
+        Product product = new Product
+        {
+            Id = await reader.GetFieldValueAsync<int>("ProductId"),
+            Name = await reader.GetFieldValueAsync<string>("ProductName"),
+            UnitPrice = await reader.GetFieldValueAsync<decimal>("UnitPrice"),
+        };
+        products.Add(product);
 
         WriteLine("| {0,5} | {1,-35} | {2,10:C} |", 
-            productId, productName, unitPrice);
+            product.Id, product.Name, product.UnitPrice);
 
         jsonWriter.WriteStartObject();
-        jsonWriter.WriteNumber("productId", productId);
-        jsonWriter.WriteString("productName", productName);
-        jsonWriter.WriteNumber("unitPrice", unitPrice);
+        jsonWriter.WriteNumber("productId", product.Id);
+        jsonWriter.WriteString("productName", product.Name);
+        jsonWriter.WriteNumber("unitPrice", product.UnitPrice ?? 0);
         jsonWriter.WriteEndObject();
     }
     jsonWriter.WriteEndArray();
@@ -206,6 +212,7 @@ await using (FileStream jsonStream = File.Create(jsonPath))
 
 WriteLine(horizontalLine);
 WriteLineInColor($"Written to: {jsonPath}", ConsoleColor.DarkGreen);
+WriteLineInColor(JsonSerializer.Serialize(products), ConsoleColor.Magenta);
 await reader.CloseAsync();
 if (key is ConsoleKey.D2 or ConsoleKey.NumPad2)
 {

@@ -640,3 +640,8 @@
   - Output
   - Return values
 - `PRINT` command raises the `InfoMessage` event.
+
+### Generating objects with a data reader
+
+- ADO.NET **does not have a built-in ability to map a data reader row to an object**, so we have to do it **manually**.
+- **Good Practice:** For read-only instances (immutable), use `record` type.
