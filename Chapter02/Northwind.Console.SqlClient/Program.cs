@@ -1,5 +1,8 @@
 ﻿using Microsoft.Data.SqlClient; // To use SqlConnection and so on.
 using System.Data; // To use CommandType.
+using System.Text.Json; // To use Utf8JsonWriter, JsonSerializer.
+using static System.Environment;
+using static System.IO.Path;
 
 ConfigureConsole();
 
@@ -174,15 +177,35 @@ WriteLine("| {0,5} | {1,-35} | {2,10} |",
     arg0: "Id", arg1: "Name", arg2: "Price");
 WriteLine(horizontalLine);
 
-while (await reader.ReadAsync())
+// Define a file path to write to.
+string jsonPath = Combine(CurrentDirectory, "products.json");
+await using (FileStream jsonStream = File.Create(jsonPath))
 {
-    WriteLine("| {0,5} | {1,-35} | {2,10:C} |",
-        await reader.GetFieldValueAsync<int>("ProductId"),
-        await reader.GetFieldValueAsync<string>("ProductName"),
-        await reader.GetFieldValueAsync<decimal>("UnitPrice"));
+    Utf8JsonWriter jsonWriter = new(jsonStream);
+    jsonWriter.WriteStartArray();
+
+    while (await reader.ReadAsync())
+    {
+        int productId = await reader.GetFieldValueAsync<int>("ProductId");
+        string productName = await reader.GetFieldValueAsync<string>("ProductName");
+        decimal unitPrice = await reader.GetFieldValueAsync<decimal>("UnitPrice");
+
+        WriteLine("| {0,5} | {1,-35} | {2,10:C} |", 
+            productId, productName, unitPrice);
+
+        jsonWriter.WriteStartObject();
+        jsonWriter.WriteNumber("productId", productId);
+        jsonWriter.WriteString("productName", productName);
+        jsonWriter.WriteNumber("unitPrice", unitPrice);
+        jsonWriter.WriteEndObject();
+    }
+    jsonWriter.WriteEndArray();
+    jsonWriter.Flush();
+    jsonStream.Close();
 }
 
 WriteLine(horizontalLine);
+WriteLineInColor($"Written to: {jsonPath}", ConsoleColor.DarkGreen);
 await reader.CloseAsync();
 if (key is ConsoleKey.D2 or ConsoleKey.NumPad2)
 {
