@@ -645,3 +645,28 @@
 
 - ADO.NET **does not have a built-in ability to map a data reader row to an object**, so we have to do it **manually**.
 - **Good Practice:** For read-only instances (immutable), use `record` type.
+
+## Managing data with Dapper
+
+- Dapper extends the `IDbConnection` interface with very basic functionality.
+
+### Dapper connection extension methods
+
+- Three extension methods to `IDbConnection`:
+  1. \*`Query<T>`
+     - The most used.
+     - By default, it **buffers the entire reader (all rows)** on return. With **large datasets**, you can **minimize memory** and only load objects as needed by setting `buffered` to `false`.
+  2. `Query`
+  3. `Execute`
+- Dapper **automatically open and close the associated connection** as needed.
+
+### Querying using Dapper
+
+- When using **stored procedures** to query:
+  - Must pass a `param` object with **all parameters**.
+  - Must explicitly set the **command type** to stored procedure.
+- Reference: [Dapper](https://github.com/DapperLib/Dapper/blob/main/Readme.md)
+
+## Alternatives for storing secrets
+
+- Reference: [App secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets)

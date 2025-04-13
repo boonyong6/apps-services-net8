@@ -2,7 +2,7 @@
 
 public class Product
 {
-    public required int Id { get; init; }
-    public string? Name { get; init; }
+    public required int ProductId { get; init; }
+    public string? ProductName { get; init; }
     public decimal? UnitPrice { get; init; }
 }
