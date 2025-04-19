@@ -725,3 +725,86 @@
       entity.ToView("Products Above Average Price");
   });
   ```
+
+### [Controlling the tracking of entities](https://github.com/boonyong6/csharp-12-and-dotnet-8-note?tab=readme-ov-file#controlling-the-tracking-of-entities)
+
+## Mapping inheritance hierarchies with EF Core
+
+```csharp
+public abstract class Person
+{
+    public int Id { get; set; }
+    public string? Name { get; set; }
+}
+
+public class Student : Person
+{
+    public string? Subject { get; set; }
+}
+
+public class Employee : Person
+{
+    public DateTime HireDate { get; set; }
+}
+```
+
+### Table-per-hierarchy (TPH) mapping strategy - Default
+
+![3-5-sample-data-in-the-people-table](images/3-5-sample-data-in-the-people-table.png)
+
+- Use a **single table** with a **discriminator column** to indicate the **type**.
+- **Cons:**
+  - Require the columns for **properties of derived types** to be **nullable**.
+  - Cause an issue when **properties are required** at the **class level**.
+- **Pros:**
+  - Simplicity and performance.
+- **Good Practice:** Define an **index on the discriminator column** when it has **many different values**.
+
+### Table-per-type (TPT) mapping strategy
+
+![3-6-people-table](images/3-6-people-table.png)
+
+- Use a table for **every type**.
+- **Pros:**
+  - Reduced storage (full normalization)
+- **Cons:**
+  - A single entity is **spread** over multiple tables. It takes more effort to reconstruct it, which reduces overall performance.
+- Usually a **POOR choice**.
+  - Only use it if the table is **already normalized** and **can't be restructured**.
+
+### Table-per-concrete-type (TPC) mapping strategy
+
+![3-10-employees-table](images/3-10-employees-table.png)
+
+- Use a table for each **non-abstract type**.
+- **Note:** Since there's no shared table to define the `IDENTITY` column, we can use a **id sequence** to share between tables.
+  - `(NEXT VALUE FOR [PersonIds])`
+- **Pros:**
+  - **Performance** - When querying a single concrete type, only one table is needed.
+- Best for inheritance hierarchies of **many concrete types**, each with **many type-specific properties**.
+
+### Configuring inheritance hierarchy mapping strategies
+
+1. **All types** must be included in the DB context.
+
+   ```csharp
+   public DbSet<Person> People { get; set; }
+   public DbSet<Student> Students { get; set; }
+   public DbSet<Employee> Employees { get; set; }
+   ```
+
+2. In the DB context `OnModelCreating` method, call the "use mapping strategy" method **on the base class**.
+
+   ```csharp
+   modelBuilder.Entity<Person>().UseTptMappingStrategy();
+   // OR
+   modelBuilder.Entity<Person>().UseTpcMappingStrategy();
+   ```
+
+3. For the **TPC strategy**, configure a shared sequence.
+
+   ```csharp
+   modelBuilder.HasSequence<int>("PersonIds");
+   modelBuilder.Entity<Person>().UseTpcMappingStrategy()
+     .Property(e => e.Id).HasDefaultValueSql("NEXT VALUE FOR [PersonIds]");
+   ```
