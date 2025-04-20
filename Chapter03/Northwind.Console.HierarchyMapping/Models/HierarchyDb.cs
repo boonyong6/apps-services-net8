@@ -8,6 +8,10 @@ public class HierarchyDb : DbContext
     public DbSet<Student> Students { get; set; }
     public DbSet<Employee> Employees { get; set; }
 
+    public HierarchyDb()
+    {
+    }
+
     public HierarchyDb(DbContextOptions<HierarchyDb> options)
         : base(options)
     {
@@ -36,5 +40,15 @@ public class HierarchyDb : DbContext
 
         modelBuilder.Entity<Student>().HasData(person1);
         modelBuilder.Entity<Employee>().HasData(person2, person3);
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (optionsBuilder.IsConfigured)
+        {
+            return;
+        }
+
+        optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=HierarchyMapping;Integrated Security=True;Multiple Active Result Sets=True;Connect Timeout=3;Trust Server Certificate=True");
     }
 }
