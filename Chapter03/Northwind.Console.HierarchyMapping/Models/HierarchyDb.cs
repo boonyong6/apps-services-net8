@@ -15,7 +15,9 @@ public class HierarchyDb : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Person>().UseTphMappingStrategy();
+        modelBuilder.Entity<Person>()
+            //.UseTphMappingStrategy();
+            .UseTptMappingStrategy();
 
         // Populate database with sample data. (Seeding)
         Student person1 = new() { Id = 1, Name = "Roman Roy", 
