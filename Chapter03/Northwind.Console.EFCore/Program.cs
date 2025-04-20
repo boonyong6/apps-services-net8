@@ -1,6 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Northwind.Models;
+﻿using Microsoft.Data.SqlClient; // To use SqlConnectionStringBuilder.
+using Microsoft.EntityFrameworkCore; // ToQueryString, GetConnectionString.
+using Northwind.Models;  // To use NorthwindDb.
 
 SqlConnectionStringBuilder builder = new()
 {
