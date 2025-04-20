@@ -32,6 +32,11 @@ WriteLine($"Database created: {created}");
 WriteLine("SQL script used to create the database:");
 WriteLine(db.Database.GenerateCreateScript());
 
+db.Students.Add(new() { Name = "Connor Roy", Subject = "Politics" });
+db.Employees.Add(new() { Name = "Kerry Castellabate", HireDate = DateTime.UtcNow });
+int affectedRows = db.SaveChanges();
+WriteLine($"{affectedRows} people added.");
+
 if (db.Students is null || !db.Students.Any())
 {
     WriteLine("There are no students.");
@@ -56,4 +61,10 @@ else
         WriteLine("{0} was hired on {1}", 
             employee.Name, employee.HireDate);
     }
+}
+
+foreach (Person person in db.People)
+{
+    WriteLine("[{0}] {1} has ID of {2}.",
+        person.GetType().Name, person.Name, person.Id);
 }

@@ -17,7 +17,14 @@ public class HierarchyDb : DbContext
     {
         modelBuilder.Entity<Person>()
             //.UseTphMappingStrategy();
-            .UseTptMappingStrategy();
+            //.UseTptMappingStrategy();
+            .UseTpcMappingStrategy()
+            .Property(person => person.Id)
+            .HasDefaultValueSql("NEXT VALUE FOR [PersonIds]");
+        modelBuilder.HasSequence<int>("PersonIds", builder =>
+        {
+            builder.StartsAt(4);
+        });
 
         // Populate database with sample data. (Seeding)
         Student person1 = new() { Id = 1, Name = "Roman Roy", 
