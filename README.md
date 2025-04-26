@@ -812,8 +812,8 @@ public class Employee : Person
 ## Building a reusable entity data model
 
 - A **pair** of reusable class libraries:
-  1. Define the **entities**.
-  2. Define the **tables** in the database and the **default configuration** for how to **connect** to the database, and use the **Fluent API** to configure additional options for the model.
+  1. **Entity models** - Define the **entities**.
+  2. **Data context** - Define the **tables** in the database and the **default configuration** for how to **connect** to the database, and use the **Fluent API** to configure additional options for the model.
 - Command to scaffold entity class models:
   ```bash
   dotnet ef dbcontext scaffold "Data Source=.;Initial Catalog=Northwind;Integrated Security=true;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer --namespace Northwind.EntityModels --data-annotations
