@@ -818,3 +818,8 @@ public class Employee : Person
   ```bash
   dotnet ef dbcontext scaffold "Data Source=.;Initial Catalog=Northwind;Integrated Security=true;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer --namespace Northwind.EntityModels --data-annotations
   ```
+
+### Calculated properties on entity creation - `IMaterializationInterceptor`
+
+- Allows **interception** before and after an **entity is created**, and when **properties are initialized**.
+- Useful for **calculated values**.
