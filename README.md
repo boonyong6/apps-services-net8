@@ -808,3 +808,13 @@ public class Employee : Person
    modelBuilder.Entity<Person>().UseTpcMappingStrategy()
      .Property(e => e.Id).HasDefaultValueSql("NEXT VALUE FOR [PersonIds]");
    ```
+
+## Building a reusable entity data model
+
+- A **pair** of reusable class libraries:
+  1. Define the **entities**.
+  2. Define the **tables** in the database and the **default configuration** for how to **connect** to the database, and use the **Fluent API** to configure additional options for the model.
+- Command to scaffold entity class models:
+  ```bash
+  dotnet ef dbcontext scaffold "Data Source=.;Initial Catalog=Northwind;Integrated Security=true;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer --namespace Northwind.EntityModels --data-annotations
+  ```
