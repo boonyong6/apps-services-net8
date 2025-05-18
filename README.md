@@ -823,3 +823,128 @@ public class Employee : Person
 
 - Allows **interception** before and after an **entity is created**, and when **properties are initialized**.
 - Useful for **calculated values**.
+
+# 4 Managing NoSQL Data Using Azure Cosmos DB
+
+- Create Cosmos DB resources using the **local emulator**.
+- Working with **traditional data** using the **Core (SQL) API**.
+- **Online-only** section covers working with **graph data** using the **Gremlin API**.
+
+## Understanding NoSQL databases
+
+### Cosmos DB and its APIs
+
+- A NoSQL data store.
+- Support multiple APIs:
+  - Native API - SQL-based
+  - Alternative APIs - MongoDB, Cassandra, and Gremlin.
+- Store data in **atom-record-sequence (ARS)** format.
+- Choose the API when creating the database:
+
+  | API                                 | Description                                                                                                                                                                                  |
+  | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | API for MongoDB                     | - Allows **existing clients** to interact with the data as if it's a real MongoDB database.<br />- Data migration tools - `mongodump`, `mongorestore`                                        |
+  | API for Cassandra                   | - Allows **existing clients** to interact with the data as if it's a real Cassandra database.                                                                                                |
+  | Core (SQL) API<br />(JSON Document) | - Recommended for **new projects**.<br />- Allows developers to **query JSON documents** using a language like SQL.<br />- Uses **JSON's type system** and **JavaScript's function system**. |
+  | Gremlin API for Cosmos DB           | - To treat Cosmos DB as a **graph data store**. <br />- To analyze the metadata of the relationships between data items.                                                                     |
+
+- **Good Practice:** If you are unsure which API to choose, **select Core (SQL) as the default**.
+
+### Document modeling
+
+- Common to **embed** related data (**denormalization**), which involves **duplicating data** (e.g. supplier, category).
+
+  - **Embed when** the related data (bounded/unbounded) is \***not updated frequently**, and often needs to be included in query results.
+  - E.g. The most liked comments on an article.
+
+  ```json
+  {
+    "id": "1",
+    "productId": "1",
+    "productName": "Chai",
+    "supplier": {
+      "supplierId": 1,
+      "companyName": "Exotic Liquids",
+      "contactName": "Charlotte Cooper",
+      "Address": "49 Gilbert St.",
+      "City": "London",
+      "Country": "UK",
+      "Phone": "(171) 555-2222"
+    },
+    "category": {
+      "categoryId": 1,
+      "categoryName": "Beverages",
+      "description": "Soft drinks, coffees, teas, beers, and ales",
+      "image": "https://myaccount.blob.core.windows.net/categories/beverages.png"
+    },
+    "quantityPerUnit": "10 boxes x 20 bags",
+    "unitPrice": 18.0,
+    "unitsInStock": 39,
+    "unitsOnOrder": 0,
+    "reorderLevel": 10,
+    "discontinued": false
+  }
+  ```
+
+- Reference: [Modeling documents in Azure Cosmos DB](https://learn.microsoft.com/en-us/azure/cosmos-db/sql/modeling-data)
+
+### Consistency levels
+
+- Azure Cosmos DB relies on **replication** to provide **low latency** and **high availability**.
+  - This comes with **tradeoffs** that you must accept and choose from.
+- Best consistency - **linearizability** (**must wait for replication** to occur globally)
+  - Increases the latency of write operations
+  - Reduces the availability of read operations
+- Most NoSQL databases offer two levels of consistency:
+  1. Strong
+  2. Eventual
+- Azure Cosmos DB offers **five levels** of consistency (from the strongest to the weakest):
+
+  | Consistency level | Description                                                                                                                                                                                                                                                                                                                                                                                                       |
+  | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | Strong            | - Guarantees linearizability.<br />- You probably don't want to use it in all cases, as it can slow down operations.                                                                                                                                                                                                                                                                                              |
+  | Bounded staleness | - Can read your own write within the write region, monotonic read, and consistent prefix.<br />- Staleness of read data **is restricted** to a number of versions within a time interval.<br />- **E.g.** if we set the time interval to ten minutes and the number of versions to three, then a **maximum of three writes can be made in ten-minute period** before a read operation must reflect those changes. |
+  | Session           | - Can read your own write within the write region, monotonic read, and consistent prefix.                                                                                                                                                                                                                                                                                                                         |
+  | Consistent prefix | - **Guarantees the order** that writes can then be read.                                                                                                                                                                                                                                                                                                                                                          |
+  | Eventual          | - The order of reads **may not match** the order of writes.<br />- Data will only become consistent eventually (when writes pause).<br />- Possible for a client to read data **older than** the ones it read before.                                                                                                                                                                                             |
+
+- Reference: [Consistency levels](https://learn.microsoft.com/en-us/azure/cosmos-db/consistency-levels)
+
+### Hierarchy of components
+
+- **Account** - Can create up to 50 accounts.
+- **Database** - E.g. `Northwind`.
+- **Container** (aka collection) - E.g. `Products`.
+- **Partition:**
+  - Partition provisioning is managed by Azure.
+  - No control over physical partition.
+  - Define **partition keys** to control the logical partition.
+- **Item** (generic term) - A stored entity.
+
+  | API                            | Specific terms |
+  | ------------------------------ | -------------- |
+  | Core (SQL) API                 | JSON document  |
+  | Cassandra                      | Row            |
+  | MongoDB                        | Document       |
+  | Graph databases (e.g. Gremlin) | Vertex, Edge   |
+
+### Throughput provisioning
+
+- Measured as **request units per second (RU/s)**.
+  - **One request unit (RU)** is about the cost **a `GET` request for a 1KB document using its ID**.
+- Must be provisioned **in advance**.
+  - **Must estimate throughput** by calculating the number of operations to support throughout the year.
+- `RequestCharge` property - Shows how much a request costs in RUs.
+- **Most throughput settings** are applied at the **container level**.
+  - Can also apply it at the **database level** to **share** across all containers.
+  - Throughput is distributed equally among partitions.
+- Once throughput is **exhausted**, Cosmos DB starts **rate-limiting** access requests, and your code have to **retry later**.
+  - .NET SDK for Cosmos DB can handle the retry.
+
+### Partition strategies
+
+- Good strategy - Choosing a **suitable partition key**.
+- Set for a **container** and **can't be changed**.
+- Partition key should be **evenly distribute** operations to avoid hot partitions.
+- **Good choice** - Unique field for lookup (e.g. social security number)
+  - **But**, partition keys don't have to be unique. It will be **combined with an item ID** to uniquely identify an item.
