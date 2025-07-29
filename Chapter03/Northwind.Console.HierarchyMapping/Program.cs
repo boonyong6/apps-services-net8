@@ -32,10 +32,27 @@ WriteLine($"Database created: {created}");
 WriteLine("SQL script used to create the database:");
 WriteLine(db.Database.GenerateCreateScript());
 
-db.Students.Add(new() { Name = "Connor Roy", Subject = "Politics" });
-db.Employees.Add(new() { Name = "Kerry Castellabate", HireDate = DateTime.UtcNow });
+ContactDetails contactA = new()
+{
+    Address = new("1234 Broadway Ave, Apt 5B", "New York", "10001", "USA"),
+    Phone = "+12125550198",
+};
+
+ContactDetails contactB = new()
+{
+    Address = new("87 Orchard Street, Unit 3A", "New York", "10002", "USA"),
+    Phone = "+16465550127",
+};
+
+db.Students.Add(new() { Name = "Connor Roy", Subject = "Politics", Contact = contactA });
+db.Employees.Add(new() { Name = "Kerry Castellabate", HireDate = DateTime.UtcNow, Contact = contactB });
 int affectedRows = db.SaveChanges();
 WriteLine($"{affectedRows} people added.");
+
+var queryWithJsonColumn = db.People.Where(p => p.Contact.Address.Postcode == "10001").Select(p => p.Contact.Address.Street);
+WriteLine("\nQuery with JSON column example:");
+WriteLine(queryWithJsonColumn.ToQueryString());
+WriteLine();
 
 if (db.Students is null || !db.Students.Any())
 {

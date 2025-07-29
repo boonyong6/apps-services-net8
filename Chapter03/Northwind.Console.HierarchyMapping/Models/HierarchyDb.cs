@@ -20,9 +20,14 @@ public class HierarchyDb : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Person>()
-            //.UseTphMappingStrategy();
-            //.UseTptMappingStrategy();
-            .UseTpcMappingStrategy()
+            .UseTphMappingStrategy()  // JSON Columns only support TPH.
+            //.UseTptMappingStrategy()
+            //.UseTpcMappingStrategy()
+            .OwnsOne(person => person.Contact, ownedNavigationBuilder =>
+            {
+                ownedNavigationBuilder.ToJson();  // <--
+                ownedNavigationBuilder.OwnsOne(contactDetails => contactDetails.Address);
+            })
             .Property(person => person.Id)
             .HasDefaultValueSql("NEXT VALUE FOR [PersonIds]");
         modelBuilder.HasSequence<int>("PersonIds", builder =>
@@ -30,16 +35,29 @@ public class HierarchyDb : DbContext
             builder.StartsAt(4);
         });
 
-        // Populate database with sample data. (Seeding)
-        Student person1 = new() { Id = 1, Name = "Roman Roy", 
-            Subject = "History" };
-        Employee person2 = new() { Id = 2, Name = "Kendall Roy", 
-            HireDate = new(year: 2014, month: 4, day: 2) };
-        Employee person3 = new() { Id = 3, Name = "Siobhan Roy", 
-            HireDate = new(year: 2020, month: 9, day: 12) };
+        //// Populate database with sample data. (Seeding)
+        //Student person1 = new()
+        //{
+        //    Id = 1,
+        //    Name = "Roman Roy",
+        //    Subject = "History"
+        //};
+        //Employee person2 = new()
+        //{
+        //    Id = 2,
+        //    Name = "Kendall Roy",
+        //    HireDate = new(year: 2014, month: 4, day: 2)
+        //};
+        //Employee person3 = new()
+        //{
+        //    Id = 3,
+        //    Name = "Siobhan Roy",
+        //    HireDate = new(year: 2020, month: 9, day: 12)
+        //};
 
-        modelBuilder.Entity<Student>().HasData(person1);
-        modelBuilder.Entity<Employee>().HasData(person2, person3);
+        //// HasData is not supported for entities mapped to JSON.
+        //modelBuilder.Entity<Student>().HasData(person1);
+        //modelBuilder.Entity<Employee>().HasData(person2, person3);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -8,4 +8,5 @@ public abstract class Person
     [Required]
     [StringLength(40)]
     public string? Name { get; set; }
+    public ContactDetails Contact { get; set; } = null!;
 }

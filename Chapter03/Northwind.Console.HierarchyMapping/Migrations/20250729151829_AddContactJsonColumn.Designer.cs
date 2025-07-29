@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Northwind.Models;
 
@@ -11,9 +12,11 @@ using Northwind.Models;
 namespace Northwind.Console.HierarchyMapping.Migrations
 {
     [DbContext(typeof(HierarchyDb))]
-    partial class HierarchyDbModelSnapshot : ModelSnapshot
+    [Migration("20250729151829_AddContactJsonColumn")]
+    partial class AddContactJsonColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
