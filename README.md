@@ -27,7 +27,6 @@
 - Chapter 5, **Multitasking** and **Concurrency**
   - To allow **multiple actions** to occur at the same time by using **threads** and **tasks**.
 - Chapter 6, Implementing Popular **Third-Party Libraries**
-
   - To perform common practical tasks.
 
   | Library          | Purpose                           |
@@ -110,7 +109,6 @@
 - Use a **overall name** for the **solution**.
 - Use the **type of project** as part of the project name.
 - Example naming conventions:
-
   - Northwind is a fictional company name.
 
   | Name                              | Type                            | Description                                                                            |
@@ -302,7 +300,6 @@
 ### Using an analyzer to write better code - StyleCop
 
 - Steps to setup StyleCop:
-
   1. Add the `StyleCop.Analyzers` package reference.
   2. Add a `stylecop.json` for configuring StyleCop settings.
 
@@ -320,7 +317,6 @@
 #### Suppressing warnings
 
 - Three ways:
-
   1. Setting an **assembly-level attribute**
 
      ```cs
@@ -353,7 +349,6 @@
 #### Fixing the code
 
 - **Project property** for generating an **XML file for documentation**.
-
   - The XML file can then be processed by a tool like **DocFX** to convert it into documentation files.
   - Reference: [DocFX guide](https://www.jamescroft.co.uk/building-net-project-docs-with-docfx-on-github-pages/)
 
@@ -368,7 +363,6 @@
 #### Understanding common StyleCop recommendations
 
 - Order inside a code file:
-
   1. External alias directives
   2. Using directives
   3. Namespaces
@@ -379,7 +373,6 @@
   8. Classes
 
 - Order within a class:
-
   1. Fields
   2. Constructors
   3. Destructors (finalizers)
@@ -497,7 +490,6 @@
   - **Database name**
   - **Security info** - username and password, or Windows Authentication
 - **Connection string's keywords for parameters**:
-
   - Multiple possible keywords is for **backward compatibility**.
 
   | Keywords                      | Description                                                                                                                                                                                    |
@@ -853,7 +845,6 @@ public class Employee : Person
 ### Document modeling
 
 - Common to **embed** related data (**denormalization**), which involves **duplicating data** (e.g. supplier, category).
-
   - **Embed when** the related data (bounded/unbounded) is \***not updated frequently**, and often needs to be included in query results.
   - E.g. The most liked comments on an article.
 
@@ -948,3 +939,7 @@ public class Employee : Person
 - Partition key should be **evenly distribute** operations to avoid hot partitions.
 - **Good choice** - Unique field for lookup (e.g. social security number)
   - **But**, partition keys don't have to be unique. It will be **combined with an item ID** to uniquely identify an item.
+
+## Creating Cosmos DB resources
+
+- Can create **locally** using an **[Azure Cosmos DB Emulator](https://aka.ms/cosmosdb-emulator)**.
