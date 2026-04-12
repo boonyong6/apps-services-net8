@@ -1,11 +1,19 @@
-﻿using Microsoft.Azure.Cosmos;
-using System.Net;
+﻿using Microsoft.Azure.Cosmos; // To use CosmosClient and so on.
+using System.Net; // To use HttpStatusCode.
 
+// This is defined in the default empty namespace, so it merges with
+// the SDK-generated partial Program class.
 partial class Program
 {
     // To use Azure Cosmos DB in the local emulator.
     private static string endpointUri = "https://localhost:8081/";
     private static string primaryKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
+    /*
+    // To use Azure Cosmos DB in the cloud.
+    private static string account = "<your_account>";
+    private static string endpointUri = $"https://{account}.documents.azure.com:433/";
+    private static string primaryKey = "<your_key>";
+    */
 
     static async Task CreateCosmosResources()
     {
