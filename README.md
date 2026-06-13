@@ -995,3 +995,15 @@ public class Employee : Person
 
 - The only way to ensure **ACID** transactions.
 - **Cannot** use client-side code to implement transactions.
+
+## Practicing and exploring
+
+### [How to model and partition data using a real-world example](https://learn.microsoft.com/en-us/azure/cosmos-db/model-partition-example)
+
+### [Explore topics](https://github.com/markjprice/apps-services-net8/blob/main/docs/book-links.md#chapter-4---managing-nosql-data-using-azure-cosmos-db)
+
+### [Download cheat sheets](https://learn.microsoft.com/en-us/azure/cosmos-db/query-cheat-sheet)
+
+### [Explore the Gremlin API for Cosmos DB](https://github.com/markjprice/apps-services-net8/blob/main/docs/ch04-gremlin.md)
+
+### [Use NoSQL databases as a persistence infrastructure](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/nosql-database-persistence-infrastructure)
