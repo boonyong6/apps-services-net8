@@ -957,3 +957,17 @@ public class Employee : Person
   - `Headers` - HTTP response headers
   - `Diagnostics`
   - `ActivityId` - GUID value for tracking
+
+## Understanding SQL queries
+
+- Noteworthy **keywords**:
+  - `FROM` - SQL query is **executed within the context of a container** (e.g. `Products`), you can use any alias, so `FROM Items c` or `FROM p` would work the same.
+  - `LIKE` supported pattern matching:
+    - `%` - **zero, one, or more** characters.
+    - `_` - a **single** character.
+    - `[a-f]` or `[aeiou]` - a **single** character within the defined **range** or **set**.
+    - `[^aeiou]` - **not** in range or set.
+- E.g. `SELECT p.id, p.productName, p.unitPrice FROM Items p`
+- Ways of defining queries:
+  - Construct at runtime as **strings**
+  - **Stored objects** in Cosmos DB
