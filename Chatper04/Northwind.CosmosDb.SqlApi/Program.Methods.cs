@@ -3,6 +3,7 @@ using System.Net; // To use HttpStatusCode.
 using Northwind.EntityModels; // To use NorthwindContext and so on.
 using Northwind.CosmosDb.Items; // To use ProductCosmos and so on.
 using Microsoft.EntityFrameworkCore; // To use Include extension method.
+using Microsoft.Azure.Cosmos.Scripts; // To use StoredProcedureResponse and so on.
 
 // This is defined in the default empty namespace, so it merges with
 // the SDK-generated partial Program class.
@@ -274,9 +275,98 @@ partial class Program
         {
             WriteLine("Error: {0} says {1}", 
                 arg0: ex.GetType(), arg1: ex.Message);
-            throw;
         }
 
         WriteLine("Total request charge: {0:N2} RUs", totalCharge);
+    }
+
+    static async Task CreateInsertProductStoredProcedure()
+    {
+        SectionTitle("Creating the insertProduct stored procedure");
+
+        try
+        {
+            using CosmosClient client = new(accountEndpoint: endpointUri, authKeyOrResourceToken: primaryKey);
+
+            Container container = client.GetContainer(databaseId: "Northwind", containerId: "Products");
+
+            StoredProcedureResponse response = await container.Scripts.CreateStoredProcedureAsync(
+                new StoredProcedureProperties
+                {
+                    Id = "insertProduct",
+                    // __ means getContext().getCollection().
+                    Body = """
+                    function insertProduct(product) {
+                      if (!product) throw new Error("product is undefined or null.");
+                      tryInsert(product, callbackInsert);
+
+                      function tryInsert(product, callbackFunction) {
+                        var options = { disableAutomaticIdGeneration: false };
+                        
+                        // __ is an alias for getContext().getCollection()
+                        var isAccepted = __.createDocument(__.getSelfLink(), product, options, callbackFunction);
+                        if (!isAccepted)
+                          getContext().getResponse().setBody(0);
+                      }
+
+                      function callbackInsert(err, item, options) {
+                        if (err) throw err;
+                        getContext().getResponse().setBody(1);
+                      }
+                    }
+                    """
+                });
+
+            WriteLine("Status code: {0}, Request charge: {1} RUs.",
+                response.StatusCode, response.RequestCharge);
+        }
+        catch (HttpRequestException ex)
+        {
+            WriteLine($"Error: {ex.Message}");
+            WriteLine("Hint: If you are using the Azure Cosmos Emulator then please make sure it is running.");
+        }
+        catch (Exception ex)
+        {
+            WriteLine("Error: {0} says {1}",
+                arg0: ex.GetType(), arg1: ex.Message);
+        }
+    }
+
+    static async Task ExecuteInsertProductStoredProcedure()
+    {
+        SectionTitle("Executing the insertProduct stored procedure");
+
+        try
+        {
+            using CosmosClient client = new(accountEndpoint: endpointUri, authKeyOrResourceToken: primaryKey);
+
+            Container container = client.GetContainer(databaseId: "Northwind", containerId: "Products");
+
+            string pid = "78";
+            ProductCosmos product = new()
+            {
+                id = pid,
+                productId = pid,
+                productName = "Barista's Chilli Jam",
+                unitPrice = 12M,
+                unitsInStock = 10,
+            };
+
+            StoredProcedureExecuteResponse<string> response = await container.Scripts.ExecuteStoredProcedureAsync<string>(
+                "insertProduct", new PartitionKey(pid), new[] { product });
+            WriteLine("Status code: {0}, Request charge: {1} RUs.",
+                response.StatusCode, response.RequestCharge);
+
+        }
+        catch (HttpRequestException ex)
+        {
+            WriteLine($"Error: {ex.Message}");
+            WriteLine("Hint: If you are using the Azure Cosmos Emulator then please make sure it is running.");
+        }
+        catch (Exception ex)
+        {
+            WriteLine("Error: {0} says {1}",
+                arg0: ex.GetType(), arg1: ex.Message);
+        }
     }
 }

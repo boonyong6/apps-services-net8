@@ -971,3 +971,27 @@ public class Employee : Person
 - Ways of defining queries:
   - Construct at runtime as **strings**
   - **Stored objects** in Cosmos DB
+
+## Exploring server-side programming
+
+- Consists of **stored procedures**, **triggers**, and **user-defined functions (UDFs)** written in **JavaScript**.
+
+### Implementing user-defined functions
+
+- Can only be called from within a query. E.g.
+  ```js
+  // User-defined function
+  function salesTax(unitPrice) {
+    return unitPrice * 0.2;
+  }
+  ```
+  ```sql
+  SELECT p.unitPrice cost, udf.salesTax(p.unitPrice) AS tax
+  FROM Items p
+  WHERE p.unitPrice > 100
+  ```
+
+### Implementing stored procedures
+
+- The only way to ensure **ACID** transactions.
+- **Cannot** use client-side code to implement transactions.
