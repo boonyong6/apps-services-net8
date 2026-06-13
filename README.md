@@ -943,3 +943,17 @@ public class Employee : Person
 ## Creating Cosmos DB resources
 
 - Can create **locally** using an **[Azure Cosmos DB Emulator](https://aka.ms/cosmosdb-emulator)**.
+
+## Manipulating data with the Core (SQL) API
+
+- **Core (SQL)** - The most common API.
+
+### Performing CRUD operations with the Cosmos SQL API
+
+- **Common properties** of `Microsoft.Azure.Cosmos.Container` method response:
+  - `Resource` - The item
+  - `RequestCharge` - RUs (`double` value)
+  - `StatusCode` - E.g. `404`
+  - `Headers` - HTTP response headers
+  - `Diagnostics`
+  - `ActivityId` - GUID value for tracking
