@@ -1017,6 +1017,7 @@ public class Employee : Person
 - **Process** - An instance of a running program.
 - **Threads**
   - Execute code statement by statement.
+  - By default, each process only has one thread.
   - Keep track the **authenticated user** and **internalization rules** (e.g. language and region)
   - May **compete for** and **wait for** access to **shared resources** (e.g. variables, files, database objects).
 - Most modern operating systems use **preemptive multitasking**, which **simulates** the parallel execution of tasks.
@@ -1024,3 +1025,20 @@ public class Employee : Person
 - Use `ThreadPool` class to execute multiple small pieces of work **in the background**.
 - Use `Task` type to manage threads at a **higher abstraction level**.
 - **Good practice:** Never assume that more threads will improve performance!
+
+## Running tasks asynchronously
+
+### Running multiple actions asynchronously using tasks
+
+- `Thread` class (introduced in 2002) can be **tricky to work with directly**.
+- `Task` class (introduced in 2010) represents an **asynchronous operation**.
+  - **Simplify** the creation and management of underlying threads.
+  - A `Task` has a `ContinueWith` method that can be customized with the `TaskContinuationOptions` enum, and it can be managed with the `TaskFactory` class.
+
+### Starting tasks
+
+- **Three ways** to start the methods using `Task` instances.
+
+### Waiting for tasks
+
+![5-1-task-class-wait-methods](images/5-1-task-class-wait-methods.png)
