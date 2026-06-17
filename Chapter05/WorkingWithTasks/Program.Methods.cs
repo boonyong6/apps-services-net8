@@ -23,4 +23,22 @@
         Thread.Sleep(1000); // Simulate one second of work.
         TaskTitle("Finished Method C.");
     }
+
+    private static decimal CallWebService()
+    {
+        TaskTitle("Starting call to web service...");
+        OutputThreadInfo();
+        Thread.Sleep(Random.Shared.Next(2000, 4000));
+        TaskTitle("Finished call to web service.");
+        return 89.99M;
+    }
+
+    private static string CallStoredProcedure(decimal amount)
+    {
+        TaskTitle("Starting call to stored procedure...");
+        OutputThreadInfo();
+        Thread.Sleep(Random.Shared.Next(2000, 4000));
+        TaskTitle("Finished call to stored procedure.");
+        return $"12 products cost more than {amount:C}.";
+    }
 }

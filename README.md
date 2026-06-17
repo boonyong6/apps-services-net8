@@ -1042,3 +1042,7 @@ public class Employee : Person
 ### Waiting for tasks
 
 ![5-1-task-class-wait-methods](images/5-1-task-class-wait-methods.png)
+
+### Continuing with another task
+
+- Define **continuation tasks** when a task is dependent on the output from another task.
