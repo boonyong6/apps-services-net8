@@ -25,13 +25,20 @@ Stopwatch timer = Stopwatch.StartNew();
 #endregion
 
 #region Continuing with another task
-SectionTitle("Passing the result of one task as an input into another.");
-// You might see two different threads running, or the same thread might be reused.
-Task<string> taskServiceThenSProc = Task.Factory
-    .StartNew(CallWebService) // returns Task<decimal>
-    .ContinueWith(previousTask => // returns Task<string>
-        CallStoredProcedure(previousTask.Result));
-WriteLine($"Result: {taskServiceThenSProc.Result}");
+//SectionTitle("Passing the result of one task as an input into another.");
+//// You might see two different threads running, or the same thread might be reused.
+//Task<string> taskServiceThenSProc = Task.Factory
+//    .StartNew(CallWebService) // returns Task<decimal>
+//    .ContinueWith(previousTask => // returns Task<string>
+//        CallStoredProcedure(previousTask.Result));
+//WriteLine($"Result: {taskServiceThenSProc.Result}");
+#endregion
+
+#region Nested and child tasks
+SectionTitle("Nested and child tasks");
+Task outerTask = Task.Factory.StartNew(OuterMethod);
+outerTask.Wait();
+WriteLine("Console app is stopping.");
 #endregion
 
 WriteLine($"{timer.ElapsedMilliseconds:#,##0}ms elapsed.");

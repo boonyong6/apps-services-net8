@@ -1046,3 +1046,19 @@ public class Employee : Person
 ### Continuing with another task
 
 - Define **continuation tasks** when a task is dependent on the output from another task.
+
+### Nested and child tasks
+
+- **Nested task** - A task that is created **inside another task**.
+- **Child task** - A nested task that **must finish before its parent task can finish**.
+- Use `TaskCreationOptions.AttachedToParent` to link nested tasks as parent and child.
+  ```csharp
+  private static void OuterMethod()
+  {
+    TaskTitle("Outer method starting...");
+    Task innerTask = Task.Factory.StartNew(InnerMethod,
+      TaskCreationOptions.AttachedToParent);  // <--
+    TaskTitle("Outer method finished.");
+  }
+  ```
+- \*`OuterMethod` can finish its work before `InnerMethod`, but its task must wait.
