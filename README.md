@@ -1007,3 +1007,20 @@ public class Employee : Person
 ### [Explore the Gremlin API for Cosmos DB](https://github.com/markjprice/apps-services-net8/blob/main/docs/ch04-gremlin.md)
 
 ### [Use NoSQL databases as a persistence infrastructure](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/nosql-database-persistence-infrastructure)
+
+# 5 Multitasking and Concurrency
+
+- About allowing **multiple actions** to occur **at the same time**.
+
+## Understanding processes, threads, and tasks
+
+- **Process** - An instance of a running program.
+- **Threads**
+  - Execute code statement by statement.
+  - Keep track the **authenticated user** and **internalization rules** (e.g. language and region)
+  - May **compete for** and **wait for** access to **shared resources** (e.g. variables, files, database objects).
+- Most modern operating systems use **preemptive multitasking**, which **simulates** the parallel execution of tasks.
+  - Divides the **processor time** among the threads, allocating a **time slice**
+- Use `ThreadPool` class to execute multiple small pieces of work **in the background**.
+- Use `Task` type to manage threads at a **higher abstraction level**.
+- **Good practice:** Never assume that more threads will improve performance!
