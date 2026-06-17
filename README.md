@@ -1062,3 +1062,11 @@ public class Employee : Person
   }
   ```
 - \*`OuterMethod` can finish its work before `InnerMethod`, but its task must wait.
+
+### Wrapping tasks around other objects
+
+![5-2-methods-to-create-a-task-in-various-scenarios](images/5-2-methods-to-create-a-task-in-various-scenarios.png)
+
+- Useful when:
+  - Implement an interface that has asynchronous methods, but you implementation is synchronous.
+  - Mock asynchronous implementation during unit testing.
