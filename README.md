@@ -1070,3 +1070,11 @@ public class Employee : Person
 - Useful when:
   - Implement an interface that has asynchronous methods, but you implementation is synchronous.
   - Mock asynchronous implementation during unit testing.
+
+## Synchronizing access to shared resources
+
+- **Simplest mechanism** for implementing **thread safety** is to use an **object variable** ("conch") as a **flag** or **traffic light** to indicate when a shared resource has an **mutually exclusive lock** applied.
+- Conch represents the **permits** to access the shared resource(s). Conch is **not a lock**, so only code that respects the conch enabled synchronized access.
+- **Types for synchronizing access** to shared resources:
+  - `Monitor` - Check the **eligibility of accessing shared resource** within the **same process**.
+  - `Interlocked` - Manipulate **simple numeric types** at the **CPU level**.
