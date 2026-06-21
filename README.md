@@ -1074,7 +1074,27 @@ public class Employee : Person
 ## Synchronizing access to shared resources
 
 - **Simplest mechanism** for implementing **thread safety** is to use an **object variable** ("conch") as a **flag** or **traffic light** to indicate when a shared resource has an **mutually exclusive lock** applied.
-- Conch represents the **permits** to access the shared resource(s). Conch is **not a lock**, so only code that respects the conch enabled synchronized access.
+- Conch (metaphor)
+  - Represents the **permit** to access the shared resource(s).
+  - **Not a lock** - **Only code that respects** the conch enabled synchronized access, since checking the conch is **voluntary**.
+  - **Good Practice:** Make sure **all methods** that access a shared resource respect the conch by calling `lock` on it before trying to use any shared resources.
 - **Types for synchronizing access** to shared resources:
   - `Monitor` - Check the **eligibility of accessing shared resource** within the **same process**.
   - `Interlocked` - Manipulate **simple numeric types** at the **CPU level**.
+
+## Understanding the lock statement
+
+- What `lock` statement does?
+  - C# compiler changes the `lock` statement into a `try`-`finally` statement that uses the `Monitor` class to **_enter_** and **_exit_** the conch object.
+  ```csharp
+  try
+  {
+    Monitor.Enter(SharedObjects.Conch); // Take
+    // Work with a shared resource.
+  }
+  finally
+  {
+    Monitor.Exit(SharedObjects.Conch); // Release
+  }
+  ```
+- `Monitor.Enter` requires a **reference type** to lock the **memory address**.
