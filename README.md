@@ -1082,7 +1082,7 @@ public class Employee : Person
   - `Monitor` - Check the **eligibility of accessing shared resource** within the **same process**.
   - `Interlocked` - Manipulate **simple numeric types** at the **CPU level**.
 
-## Understanding the lock statement
+### Understanding the lock statement
 
 - What `lock` statement does?
   - C# compiler changes the `lock` statement into a `try`-`finally` statement that uses the `Monitor` class to **_enter_** and **_exit_** the conch object.
@@ -1098,3 +1098,11 @@ public class Employee : Person
   }
   ```
 - `Monitor.Enter` requires a **reference type** to lock the **memory address**.
+
+### Avoiding deadlocks
+
+- Using the `lock` statement can cause a deadlock.
+- Deadlocks can occur **when** there are **more shared resources** (**each with a conch**).
+- One way to **prevent** deadlocks - Specify a **timeout** when attempting to get a lock. **Caveat:** Must to manually use the `Monitor` class.
+- **Good Practice:** Only use `lock` statement if the code can avoid potential deadlocks. Otherwise, use `Monitor.TryEnter` method with a `try`-`finally` statement.
+- [Good threading practices](https://learn.microsoft.com/en-us/dotnet/standard/threading/managed-threading-best-practices)
