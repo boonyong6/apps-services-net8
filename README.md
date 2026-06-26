@@ -1106,3 +1106,24 @@ public class Employee : Person
 - One way to **prevent** deadlocks - Specify a **timeout** when attempting to get a lock. **Caveat:** Must to manually use the `Monitor` class.
 - **Good Practice:** Only use `lock` statement if the code can avoid potential deadlocks. Otherwise, use `Monitor.TryEnter` method with a `try`-`finally` statement.
 - [Good threading practices](https://learn.microsoft.com/en-us/dotnet/standard/threading/managed-threading-best-practices)
+
+### Synchronizing events
+
+- **.NET events** are **not thread-safe** - **Avoid** using them in multi-threaded scenarios.
+
+### Making CPU operations atomic
+
+- It is important to understand which **operations** are **atomic** in multithreading.
+- Incrementing an integer requires **three CPU operations**:
+  1. Load a value from an instance variable into a **register**.
+  2. Increment the value.
+  3. Store the value in the instance variable.
+  ```csharp
+  int x = 3;
+  x++; // It is not atomic!
+  ```
+- Use `Interlocked` type to perform atomic actions on the integer types - `System.Int32`(`int`), `System.UInt32`(`uint`), `System.Int64`(`long`), `System.UInt64`(`ulong`).
+
+### Applying other types of synchronization
+
+![5-3-synchronization-types](images/5-3-synchronization-types.png)

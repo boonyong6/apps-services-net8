@@ -9,5 +9,6 @@ Task.WaitAll([a, b]); // Both threads modify the message concurrently.
 
 WriteLine();
 WriteLine($"Results: {SharedObjects.Message}.");
+WriteLine($"{SharedObjects.Counter} string modifications.");
 
 WriteLine($"{watch.ElapsedMilliseconds:N0} elapsed milliseconds.");

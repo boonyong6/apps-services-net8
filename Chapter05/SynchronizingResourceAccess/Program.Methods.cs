@@ -13,6 +13,7 @@
                     Thread.Sleep(Random.Shared.Next(2000));
                     // Concatenate the letter "A" to the shared message.
                     SharedObjects.Message += "A";
+                    Interlocked.Increment(ref SharedObjects.Counter);
                     // Show some activity in the console output.
                     Write(".");
                 }
@@ -38,6 +39,7 @@
                 {
                     Thread.Sleep(Random.Shared.Next(2000));
                     SharedObjects.Message += "B";
+                    Interlocked.Increment(ref SharedObjects.Counter);
                     Write(".");
                 }
             }
