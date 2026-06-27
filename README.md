@@ -1134,3 +1134,13 @@ public class Employee : Person
 - Useful for:
   - Implementing **multitasking** for a **GUI**.
   - Improving the **scalability** of **web applications** and **web services**.
+
+### [Tutorial: Generate and consume async streams using C# and .NET](https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/generate-consume-asynchronous-stream)
+
+- **Async streams** model a **streaming source of data** (aka **data streams**).
+- To **generate** use `yield return` and `async` method.
+- To **consume** Use `await foreach`.
+- **Depend on** three interfaces:
+  1. `System.Collections.Generic.IAsyncEnumerable<T>`
+  2. `System.Collections.Generic.IAsyncEnumerator<T>`
+  3. `System.IAsyncDisposable`
