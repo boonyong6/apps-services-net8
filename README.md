@@ -1127,3 +1127,10 @@ public class Employee : Person
 ### Applying other types of synchronization
 
 ![5-3-synchronization-types](images/5-3-synchronization-types.png)
+
+## Understanding async and await
+
+- Two keywords (`async`, `await`) when working with `Task` type:
+- Useful for:
+  - Implementing **multitasking** for a **GUI**.
+  - Improving the **scalability** of **web applications** and **web services**.
