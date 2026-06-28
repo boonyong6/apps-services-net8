@@ -1137,14 +1137,14 @@ public class Employee : Person
 
 ### [Tutorial: Generate and consume async streams using C# and .NET](https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/generate-consume-asynchronous-stream)
 
-- **Async streams** model a **streaming source of data** (aka **data streams**).
+- **Async Streams** model a **streaming source of data** (aka **data streams**).
 - To **generate** an Async Stream:
   1. Define an `async` method.
   2. Return `IAsyncEnumerable<T>`.
   3. Stream/return data using `yield return`.
 - To **consume** an Async Stream:
   1. Iterate over an Async Stream using `await foreach`.
-- **Depend on** three interfaces:
+- Async Stream features **depend on** three interfaces:
   1. `System.Collections.Generic.IAsyncEnumerable<T>`
   2. `System.Collections.Generic.IAsyncEnumerator<T>`
   3. `System.IAsyncDisposable`
