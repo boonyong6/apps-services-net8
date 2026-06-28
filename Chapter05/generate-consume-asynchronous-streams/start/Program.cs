@@ -4,7 +4,6 @@ using Octokit;
 
 namespace GitHubActivityReport;
 
-// <SnippetStarterGraphQLRequest>
 public class GraphQLRequest
 {
     [JsonProperty("query")]
@@ -16,7 +15,6 @@ public class GraphQLRequest
     public string ToJsonText() =>
         JsonConvert.SerializeObject(this);
 }
-// </SnippetStarterGraphQLRequest>
 
 class Program
 {
@@ -48,7 +46,6 @@ class Program
         public void Report(int value) => action(value);
     }
 
-    // <SnippetStarterAppMain>
     static async Task Main(string[] args)
     {
         //Follow these steps to create a GitHub Access Token
@@ -66,30 +63,18 @@ class Program
             Credentials = new Octokit.Credentials(key)
         };
 
-        // <SnippetEnumerateOldStyle>
-        var progressReporter = new progressStatus((num) =>
+        int num = 0;
+        // * Step 2: CONSUME the Async Stream using `await foreach`.
+        //   By default, stream elements are processed in the Captured Context. More information: https://learn.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/consuming-the-task-based-asynchronous-pattern
+        await foreach (JToken issue in RunPagedQueryAsync(client, PagedIssueQuery, "docs"))
         {
-            Console.WriteLine($"Received {num} issues in total");
-        });
-        CancellationTokenSource cancellationSource = new CancellationTokenSource();
-
-        try
-        {
-            var results = await RunPagedQueryAsync(client, PagedIssueQuery, "docs",
-                cancellationSource.Token, progressReporter);
-            foreach(var issue in results)
-                Console.WriteLine(issue);
-        }
-        catch (OperationCanceledException)
-        {
-            Console.WriteLine("Work has been cancelled");
-        }
-        // </SnippetEnumerateOldStyle>
+            Console.WriteLine(issue);
+            Console.WriteLine($"Received {++num} issues in total");
+        } // Note: Asynchronously dispose the stream when the loop finishes.
     }
-    // </SnippetStarterAppMain>
-
-    // <SnippetRunPagedQuery>
-    private static async Task<JArray> RunPagedQueryAsync(GitHubClient client, string queryText, string repoName, CancellationToken cancel, IProgress<int> progress)
+    
+    // * Step 1: Define an async method that GENERATE an Async Stream - `IAsyncEnumerable<T>`.
+    private static async IAsyncEnumerable<JToken> RunPagedQueryAsync(GitHubClient client, string queryText, string repoName)
     {
         var issueAndPRQuery = new GraphQLRequest
         {
@@ -97,7 +82,6 @@ class Program
         };
         issueAndPRQuery.Variables["repo_name"] = repoName;
 
-        JArray finalResults = new JArray();
         bool hasMorePages = true;
         int pagesReturned = 0;
         int issuesReturned = 0;
@@ -115,18 +99,17 @@ class Program
             hasMorePages = (bool)pageInfo(results)["hasPreviousPage"]!;
             issueAndPRQuery.Variables["start_cursor"] = pageInfo(results)["startCursor"]!.ToString();
             issuesReturned += issues(results)["nodes"]!.Count();
-            // <SnippetProcessPage>
-            finalResults.Merge(issues(results)["nodes"]!);
-            progress?.Report(issuesReturned);
-            cancel.ThrowIfCancellationRequested();
-            // </SnippetProcessPage>
+
+            // * Step 1.1: GENERATE an Async Stream and stream the data.
+            foreach (JObject issue in issues(results)["nodes"]!)
+            {
+                yield return issue; // Stream element
+            }
         }
-        return finalResults;
 
         JObject issues(JObject result) => (JObject)result["data"]!["repository"]!["issues"]!;
         JObject pageInfo(JObject result) => (JObject)issues(result)["pageInfo"]!;
     }
-    // </SnippetRunPagedQuery>
 
     private static string GetEnvVariable(string item, string error, string defaultValue)
     {
