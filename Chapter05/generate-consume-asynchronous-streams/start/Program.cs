@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Octokit;
+using System.Runtime.CompilerServices;
 
 namespace GitHubActivityReport;
 
@@ -63,18 +64,40 @@ class Program
             Credentials = new Octokit.Credentials(key)
         };
 
+        try
+        {
+            await EnumerateWithCancellation(client);
+        }
+        catch (OperationCanceledException ex)
+        {
+            Console.WriteLine($"Simulate Async Stream Cancellation upon receiving 100 issues. ex.Message: {ex.Message}");
+        }
+    }
+
+    private static async Task EnumerateWithCancellation(GitHubClient client)
+    {
         int num = 0;
+        CancellationTokenSource cancellation = new();
+
         // * Step 2: CONSUME the Async Stream using `await foreach`.
         //   By default, stream elements are processed in the Captured Context. More information: https://learn.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/consuming-the-task-based-asynchronous-pattern
-        await foreach (JToken issue in RunPagedQueryAsync(client, PagedIssueQuery, "docs"))
+        await foreach (JToken issue in RunPagedQueryAsync(client, PagedIssueQuery, "docs")
+            .WithCancellation(cancellation.Token))
         {
             Console.WriteLine(issue);
             Console.WriteLine($"Received {++num} issues in total");
+
+            // Simulate Async Stream Cancellation upon receiving 100 issues.
+            if (num >= 100)
+            {
+                cancellation.Cancel();
+            }
         } // Note: Asynchronously dispose the stream when the loop finishes.
     }
     
-    // * Step 1: Define an async method that GENERATE an Async Stream - `IAsyncEnumerable<T>`.
-    private static async IAsyncEnumerable<JToken> RunPagedQueryAsync(GitHubClient client, string queryText, string repoName)
+    // * Step 1: Define an async method that GENERATE an Async Stream (aka Async-iterator) - `IAsyncEnumerable<T>`.
+    private static async IAsyncEnumerable<JToken> RunPagedQueryAsync(
+        GitHubClient client, string queryText, string repoName, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var issueAndPRQuery = new GraphQLRequest
         {
@@ -105,6 +128,9 @@ class Program
             {
                 yield return issue; // Stream element
             }
+
+            // Add cancellation support.
+            cancellationToken.ThrowIfCancellationRequested();
         }
 
         JObject issues(JObject result) => (JObject)result["data"]!["repository"]!["issues"]!;
