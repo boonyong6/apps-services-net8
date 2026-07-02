@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncConsole", "AsyncConsol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssuePRreport", "generate-consume-asynchronous-streams\start\IssuePRreport.csproj", "{9D7B5B95-97CC-D5EC-4E7B-D1EC47E5E270}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncEnumerable", "AsyncEnumerable\AsyncEnumerable.csproj", "{01E48FEC-1419-4AAF-8E8D-10B961D1A520}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{9D7B5B95-97CC-D5EC-4E7B-D1EC47E5E270}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D7B5B95-97CC-D5EC-4E7B-D1EC47E5E270}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D7B5B95-97CC-D5EC-4E7B-D1EC47E5E270}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01E48FEC-1419-4AAF-8E8D-10B961D1A520}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01E48FEC-1419-4AAF-8E8D-10B961D1A520}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01E48FEC-1419-4AAF-8E8D-10B961D1A520}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01E48FEC-1419-4AAF-8E8D-10B961D1A520}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
