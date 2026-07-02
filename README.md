@@ -1122,7 +1122,7 @@ public class Employee : Person
   int x = 3;
   x++; // It is not atomic!
   ```
-- Use `Interlocked` type to perform atomic actions on the integer types - `System.Int32`(`int`), `System.UInt32`(`uint`), `System.Int64`(`long`), `System.UInt64`(`ulong`).
+- Use `Interlocked` type to perform **atomic actions on the integer types** - `System.Int32`(`int`), `System.UInt32`(`uint`), `System.Int64`(`long`), `System.UInt64`(`ulong`).
 
 ### Applying other types of synchronization
 
@@ -1148,3 +1148,7 @@ public class Employee : Person
   1. `System.Collections.Generic.IAsyncEnumerable<T>`
   2. `System.Collections.Generic.IAsyncEnumerator<T>`
   3. `System.IAsyncDisposable`
+
+### Improving scalability for web applications and web services
+
+- When using the `async` and `await` keywords on the server side, **cheaper worker threads** are created to wait for long-running tasks to finish so that **expensive I/O threads** can handle other client requests.
